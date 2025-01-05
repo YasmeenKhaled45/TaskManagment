@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -30,23 +31,22 @@ namespace TaskManagement.DataAccess.Data
             // Configure Tasks.CreatedBy relationship
             modelBuilder.Entity<Tasks>()
                 .HasOne(t => t.CreatedBy)
-                .WithMany(u => u.AssignedTasks)  // A user can have many tasks created by them
+                .WithMany(u => u.AssignedTasks)  
                 .HasForeignKey(t => t.CreateById)
-                .OnDelete(DeleteBehavior.Restrict); // Optional: Prevent cascading delete
-
-            // Configure Tasks.UpdatedBy relationship
+                .OnDelete(DeleteBehavior.Restrict); 
             modelBuilder.Entity<Tasks>()
                 .HasOne(t => t.UpdatedBy)
-                .WithMany()  // If User does not have a collection for UpdatedBy, use WithMany()
+                .WithMany()  
                 .HasForeignKey(t => t.UpdatedById)
-                .OnDelete(DeleteBehavior.Restrict); // Optional: Prevent cascading delete
+                .OnDelete(DeleteBehavior.Restrict);
 
-
+          
+       
 
             modelBuilder.Entity<User>()
           .OwnsMany(u => u.RefreshTokens, rt =>
           {
-              rt.Property(r => r.Token).HasMaxLength(500); // Example of configuring properties
+              rt.Property(r => r.Token).HasMaxLength(500); 
 
           });
         }

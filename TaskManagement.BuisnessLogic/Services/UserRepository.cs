@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,12 +31,20 @@ namespace TaskManagement.BuisnessLogic.Services
             }
 
             var res = await _userManager.CreateAsync(user,request.Password);
-            if (res.Succeeded)
+            if (!res.Succeeded)
             {
-                return Result.Success();
+                var errors = string.Join(", ", res.Errors.Select(e => e.Description));
+                return Result.Failure(new Error("Registration Failed!", errors));
             }
-            var errors = string.Join(", ", res.Errors.Select(e => e.Description));
-            return Result.Failure(new Error("Registration Failed!", errors));
+
+            var roleResult = await _userManager.AddToRoleAsync(user, "User");
+            if (!roleResult.Succeeded)
+            {
+                var roleErrors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+                return Result.Failure(new Error("Role Assignment Failed!", roleErrors));
+            }
+
+            return Result.Success();
         }
     }
 }

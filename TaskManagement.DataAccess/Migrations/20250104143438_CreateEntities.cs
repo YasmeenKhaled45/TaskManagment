@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TaskManagement.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class createEntities : Migration
+    public partial class CreateEntities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

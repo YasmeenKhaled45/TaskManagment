@@ -12,8 +12,8 @@ using TaskManagement.DataAccess.Data;
 namespace TaskManagement.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250103222402_createEntities")]
-    partial class createEntities
+    [Migration("20250104143533_SeedRoles")]
+    partial class SeedRoles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
