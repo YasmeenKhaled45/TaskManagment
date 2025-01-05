@@ -8,5 +8,5 @@ using TaskManagement.DataAccess.Enums;
 namespace TaskManagement.DataAccess.Dtos.Tasks
 {
     public record CreateTask
-    (string Title, string Description, DateTime DueDate, TaskPriority TaskPriority, Status Status);
+    (string Title, string Description, DateOnly DueDate, TaskPriority TaskPriority, Status Status);
 }

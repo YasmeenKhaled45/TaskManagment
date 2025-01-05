@@ -11,5 +11,7 @@ namespace TaskManagement.DataAccess.Interfaces.Tasks
     public interface ITaskRepository
     {
         Task<TaskDto> CreateTaskAsync(CreateTask task , CancellationToken cancellationToken);
+        Task<TaskDto> GetTaskById(int Id, CancellationToken cancellationToken);
+
     }
 }

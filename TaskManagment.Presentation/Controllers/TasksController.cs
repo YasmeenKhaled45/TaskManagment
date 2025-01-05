@@ -19,10 +19,18 @@ namespace TaskManagment.Presentation.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateTask(CreateTask task , CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateTask([FromForm]CreateTask task , CancellationToken cancellationToken)
         {
             var res = await repository.CreateTaskAsync(task, cancellationToken);
             return Ok(res);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTask([FromRoute] int id , CancellationToken cancellationToken)
+        {
+            var result = await repository.GetTaskById(id, cancellationToken);
+            if(result == null)
+                return NotFound("Task not found ");
+            return Ok(result);
         }
     }
 }

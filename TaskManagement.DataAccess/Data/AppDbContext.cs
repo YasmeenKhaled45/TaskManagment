@@ -57,7 +57,7 @@ namespace TaskManagement.DataAccess.Data
             var entries = ChangeTracker.Entries<AuditLogging>();
             foreach (var entry in entries)
             {
-                var userId = _contextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userId = _contextAccessor.HttpContext?.User.FindFirstValue("uid");
                 if (userId != null)
                 {
                     if (entry.State == EntityState.Added)

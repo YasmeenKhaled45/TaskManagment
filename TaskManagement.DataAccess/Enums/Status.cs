@@ -10,6 +10,7 @@ namespace TaskManagement.DataAccess.Enums
     {
         ToDo,
         InProgress,
-        Completed
+        Completed,
+        InActive
     }
 }

@@ -11,6 +11,11 @@ using TaskManagement.DataAccess.Entities;
 using TaskManagement.DataAccess.Interfaces.User;
 using TaskManagement.DataAccess.Interfaces.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
+using TaskManagement.DataAccess.Interfaces.Comments;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +24,30 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Enter Your Token",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+        {
+          new OpenApiSecurityScheme{
+             Reference = new OpenApiReference{
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+              }
+
+            },
+            new List<string>()
+          }
+        });
+});
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 builder.Services.AddOptions<JWT>().BindConfiguration("JWT")
@@ -33,9 +61,32 @@ builder.Services.Configure<IdentityOptions>(options =>   // register identity
     options.SignIn.RequireConfirmedEmail = true;
     options.User.RequireUniqueEmail = true;
 });
-
-builder.Services.AddScoped<ITaskRepository, TaskRepository>();  
-builder.Services.AddScoped<IUserRepository,UserRepository>(); 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(o =>
+{
+    o.SaveToken = true;
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:key"]!)),
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"]
+    };
+});
+//builder.Services.AddAuthorization(options =>                  // role based-authorize
+//{
+//    options.AddPolicy("AdminOrTeamLeader", policy =>
+//        policy.RequireRole("Admin", "TeamLeader"));
+//});
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();   // services injection
+builder.Services.AddScoped<IUserRepository,UserRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddMapster();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddFluentValidationAutoValidation();

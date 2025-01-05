@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.DataAccess.Dtos.Auth;
 using TaskManagement.DataAccess.Interfaces.User;
+using LoginRequest = TaskManagement.DataAccess.Dtos.Auth.LoginRequest;
 
 namespace TaskManagment.Presentation.Controllers
 {
@@ -22,6 +23,12 @@ namespace TaskManagment.Presentation.Controllers
         {
             var res = await repository.RegisterAsync(request, cancellationToken);
             return Ok(res);
+        }
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync(LoginRequest request , CancellationToken cancellationToken)
+        {
+            var res = await repository.LoginAsync(request,cancellationToken);
+            return res.IsSuccess ? Ok(res.Value) : BadRequest(res.Error);
         }
     }
 }

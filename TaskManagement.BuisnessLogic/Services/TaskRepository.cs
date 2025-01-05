@@ -23,5 +23,11 @@ namespace TaskManagement.BuisnessLogic.Services
             return addedtask.Adapt<TaskDto>();
 
         }
+
+        public async Task<TaskDto> GetTaskById(int Id, CancellationToken cancellationToken)
+        {
+            var task = await context.Tasks.FindAsync(Id, cancellationToken);
+            return task.Adapt<TaskDto>();
+        }
     }
 }

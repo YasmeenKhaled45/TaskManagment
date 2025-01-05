@@ -13,7 +13,7 @@ namespace TaskManagement.DataAccess.Entities
         public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public DateTime DueDate { get; set; }
+        public DateOnly DueDate { get; set; }
         public TaskPriority TaskPriority { get; set; } = TaskPriority.Low;
         public Status Status { get; set; } = Status.ToDo;
 
