@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using TaskManagement.DataAccess.Constants;
 using TaskManagement.DataAccess.Dtos.Auth;
 using TaskManagement.DataAccess.Entities;
-using TaskManagement.DataAccess.Interfaces.User;
+using TaskManagement.DataAccess.Interfaces;
 using TaskManagement.DataAccess.Responses.User;
 
 namespace TaskManagement.BuisnessLogic.Services

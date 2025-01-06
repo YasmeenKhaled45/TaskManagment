@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using TaskManagement.DataAccess.Constants;
 using TaskManagement.DataAccess.Dtos.Tasks;
 
-namespace TaskManagement.DataAccess.Interfaces.Tasks
+namespace TaskManagement.DataAccess.Interfaces
 {
     public interface ITaskRepository
     {
-        Task<TaskDto> CreateTaskAsync(CreateTask task , CancellationToken cancellationToken);
+        Task<TaskDto> CreateTaskAsync(CreateTask task, CancellationToken cancellationToken);
         Task<TaskDto> GetTaskById(int Id, CancellationToken cancellationToken);
 
     }

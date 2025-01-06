@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskManagement.DataAccess.Dtos.Comments;
 
-namespace TaskManagement.DataAccess.Interfaces.Comments
+namespace TaskManagement.DataAccess.Interfaces
 {
     public interface ICommentRepository
     {
-        Task<CommentResponse> CreateComment( int id ,CreateComment comment , CancellationToken cancellationToken);
+        Task<CommentResponse> CreateComment(int id, CreateComment comment, CancellationToken cancellationToken);
     }
 }

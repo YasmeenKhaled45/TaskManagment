@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TaskManagement.BuisnessLogic.DataSantization;
 using TaskManagement.DataAccess.Dtos.Comments;
-using TaskManagement.DataAccess.Interfaces.Comments;
+using TaskManagement.DataAccess.Interfaces;
 
 namespace TaskManagment.Presentation.Controllers
 {
@@ -13,6 +14,7 @@ namespace TaskManagment.Presentation.Controllers
         private readonly ICommentRepository repository = repository;
 
         [HttpPost("{id}")]
+        [ServiceFilter(typeof(InputSanitizationFilter))]
         [Authorize]
         public async Task<IActionResult> AddComment([FromRoute]int id , CreateComment comment , CancellationToken cancellationToken)
         {

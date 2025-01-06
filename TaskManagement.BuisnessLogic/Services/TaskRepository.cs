@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using TaskManagement.DataAccess.Data;
 using TaskManagement.DataAccess.Dtos.Tasks;
 using TaskManagement.DataAccess.Entities;
-using TaskManagement.DataAccess.Interfaces.Tasks;
+using TaskManagement.DataAccess.Interfaces;
 
 namespace TaskManagement.BuisnessLogic.Services
 {

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TaskManagement.BuisnessLogic.DataSantization;
 using TaskManagement.DataAccess.Dtos.Tasks;
-using TaskManagement.DataAccess.Interfaces.Tasks;
+using TaskManagement.DataAccess.Interfaces;
 
 namespace TaskManagment.Presentation.Controllers
 {
@@ -19,6 +20,7 @@ namespace TaskManagment.Presentation.Controllers
 
         [HttpPost]
         [Authorize]
+        [ServiceFilter(typeof(InputSanitizationFilter))]
         public async Task<IActionResult> CreateTask([FromForm]CreateTask task , CancellationToken cancellationToken)
         {
             var res = await repository.CreateTaskAsync(task, cancellationToken);

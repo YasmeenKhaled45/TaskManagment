@@ -8,20 +8,22 @@ using System.Reflection;
 using TaskManagement.BuisnessLogic.Services;
 using TaskManagement.DataAccess.Data;
 using TaskManagement.DataAccess.Entities;
-using TaskManagement.DataAccess.Interfaces.User;
-using TaskManagement.DataAccess.Interfaces.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
-using TaskManagement.DataAccess.Interfaces.Comments;
+using TaskManagement.BuisnessLogic.DataSantization;
+using TaskManagement.DataAccess.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>          //data santization
+{
+    options.Filters.Add(typeof(InputSanitizationFilter));
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -84,9 +86,12 @@ builder.Services.AddAuthentication(options =>
 //    options.AddPolicy("AdminOrTeamLeader", policy =>
 //        policy.RequireRole("Admin", "TeamLeader"));
 //});
+
+
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();   // services injection
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<InputSanitizationFilter>();
 builder.Services.AddMapster();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddFluentValidationAutoValidation();
