@@ -7,7 +7,7 @@ using TaskManagement.DataAccess.Entities;
 
 namespace TaskManagement.DataAccess.Data
 {
-    public class AppDbContext : IdentityDbContext<User, Role, string>
+    public class AppDbContext : IdentityDbContext<User>
     {
         private readonly IHttpContextAccessor _contextAccessor;
 

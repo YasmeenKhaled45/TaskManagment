@@ -54,7 +54,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Connection")));
 builder.Services.AddOptions<JWT>().BindConfiguration("JWT")
     .ValidateDataAnnotations().ValidateOnStart();
-builder.Services.AddIdentity<User, Role>()
+builder.Services.AddIdentity<User,IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.Configure<IdentityOptions>(options =>   // register identity
