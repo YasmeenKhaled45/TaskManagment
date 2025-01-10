@@ -91,6 +91,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();   // services injection
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<InputSanitizationFilter>();
 builder.Services.AddMapster();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

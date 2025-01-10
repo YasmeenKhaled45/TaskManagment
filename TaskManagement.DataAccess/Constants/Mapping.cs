@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TaskManagement.DataAccess.Dtos.Auth;
 using TaskManagement.DataAccess.Dtos.Comments;
 using TaskManagement.DataAccess.Dtos.Tasks;
+using TaskManagement.DataAccess.Dtos.Teams;
 using TaskManagement.DataAccess.Entities;
 
 namespace TaskManagement.DataAccess.Constants
@@ -21,6 +22,8 @@ namespace TaskManagement.DataAccess.Constants
             config.NewConfig<Tasks, TaskDto>();
             config.NewConfig<CreateComment, Comments>();
             config.NewConfig<Comments, CommentResponse>();
+            config.NewConfig<CreateTeamDto, Team>();
+            config.NewConfig<Team, TeamDto>();
         }
     }
 }

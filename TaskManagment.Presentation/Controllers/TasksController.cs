@@ -21,7 +21,7 @@ namespace TaskManagment.Presentation.Controllers
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(InputSanitizationFilter))]
-        public async Task<IActionResult> CreateTask([FromForm]CreateTask task , CancellationToken cancellationToken)
+        public async Task<IActionResult> Task([FromForm]CreateTask task , CancellationToken cancellationToken)
         {
             var res = await repository.CreateTaskAsync(task, cancellationToken);
             return Ok(res);
