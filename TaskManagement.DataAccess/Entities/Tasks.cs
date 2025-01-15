@@ -17,7 +17,10 @@ namespace TaskManagement.DataAccess.Entities
         public TaskPriority TaskPriority { get; set; } = TaskPriority.Low;
         public Status Status { get; set; } = Status.ToDo;
 
-       
+        public string? AssignedToUserId { get; set; }
+        public User User { get; set; }
+        public int? AssignedToTeamId { get; set; }
+        public Team Team { get; set; }
         public ICollection<Comments> Comments { get; set; } = new List<Comments>();
         public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
     }

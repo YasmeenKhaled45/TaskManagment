@@ -12,7 +12,7 @@ using TaskManagement.DataAccess.Data;
 namespace TaskManagement.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250110174101_SeedRoles")]
+    [Migration("20250115070424_SeedRoles")]
     partial class SeedRoles
     {
         /// <inheritdoc />
@@ -237,6 +237,12 @@ namespace TaskManagement.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AssignedToTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AssignedToUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("CreateById")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -271,6 +277,10 @@ namespace TaskManagement.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignedToTeamId");
+
+                    b.HasIndex("AssignedToUserId");
 
                     b.HasIndex("CreateById");
 
@@ -481,6 +491,16 @@ namespace TaskManagement.DataAccess.Migrations
 
             modelBuilder.Entity("TaskManagement.DataAccess.Entities.Tasks", b =>
                 {
+                    b.HasOne("TaskManagement.DataAccess.Entities.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("AssignedToTeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TaskManagement.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("AssignedToUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("TaskManagement.DataAccess.Entities.User", "CreatedBy")
                         .WithMany("AssignedTasks")
                         .HasForeignKey("CreateById")
@@ -498,7 +518,11 @@ namespace TaskManagement.DataAccess.Migrations
 
                     b.Navigation("CreatedBy");
 
+                    b.Navigation("Team");
+
                     b.Navigation("UpdatedBy");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskManagement.DataAccess.Entities.TeamUser", b =>

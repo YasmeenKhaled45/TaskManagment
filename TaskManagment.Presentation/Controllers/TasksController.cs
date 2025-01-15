@@ -9,14 +9,11 @@ namespace TaskManagment.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasksController : ControllerBase
+    public class TasksController(ITaskRepository repository) : ControllerBase
     {
-        private readonly ITaskRepository repository;
+        private readonly ITaskRepository repository = repository;
 
-        public TasksController(ITaskRepository repository)
-        {
-            this.repository = repository;
-        }
+   
 
         [HttpPost]
         [Authorize]

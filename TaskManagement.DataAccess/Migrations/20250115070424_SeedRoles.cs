@@ -26,3 +26,4 @@ namespace TaskManagement.DataAccess.Migrations
         }
     }
 }
+

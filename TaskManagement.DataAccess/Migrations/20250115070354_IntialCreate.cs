@@ -203,6 +203,8 @@ namespace TaskManagement.DataAccess.Migrations
                     DueDate = table.Column<DateOnly>(type: "date", nullable: false),
                     TaskPriority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    AssignedToUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AssignedToTeamId = table.Column<int>(type: "int", nullable: true),
                     TeamId = table.Column<int>(type: "int", nullable: true),
                     CreateById = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -212,6 +214,12 @@ namespace TaskManagement.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tasks_AspNetUsers_AssignedToUserId",
+                        column: x => x.AssignedToUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Tasks_AspNetUsers_CreateById",
                         column: x => x.CreateById,
@@ -223,6 +231,12 @@ namespace TaskManagement.DataAccess.Migrations
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Teams_AssignedToTeamId",
+                        column: x => x.AssignedToTeamId,
+                        principalTable: "Teams",
+                        principalColumn: "TeamId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Tasks_Teams_TeamId",
@@ -371,6 +385,16 @@ namespace TaskManagement.DataAccess.Migrations
                 name: "IX_Comments_UpdatedById",
                 table: "Comments",
                 column: "UpdatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_AssignedToTeamId",
+                table: "Tasks",
+                column: "AssignedToTeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_AssignedToUserId",
+                table: "Tasks",
+                column: "AssignedToUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_CreateById",
