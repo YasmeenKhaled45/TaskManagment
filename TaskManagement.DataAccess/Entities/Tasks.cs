@@ -16,7 +16,9 @@ namespace TaskManagement.DataAccess.Entities
         public DateOnly DueDate { get; set; }
         public TaskPriority TaskPriority { get; set; } = TaskPriority.Low;
         public Status Status { get; set; } = Status.ToDo;
-
+        public int? ParentTaskId { get; set; }
+        public virtual Tasks ParentTask { get; set; }
+        public virtual ICollection<Tasks> SubTasks { get; set; } = new List<Tasks>();
         public string? AssignedToUserId { get; set; }
         public User User { get; set; }
         public int? AssignedToTeamId { get; set; }

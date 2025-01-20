@@ -12,9 +12,9 @@ namespace TaskManagment.Presentation.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUserRepository repository;
+        private readonly IUserService repository;
 
-        public AuthController(IUserRepository repository)
+        public AuthController(IUserService repository)
         {
             this.repository = repository;
         }

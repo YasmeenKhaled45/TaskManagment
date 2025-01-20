@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
+    <title>Task Notification</title>
+    <style>
+        body {
+            font-family: "Nunito Sans", Helvetica, Arial, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 22px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .button {
+            background-color: #22bc66;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 3px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .email-wrapper {
+            width: 100%;
+            background-color: #000000;
+            padding: 20px;
+        }
+
+        .email-content {
+            width: 570px;
+            margin: 0 auto;
+            background-color: #333333;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #a8aaaf;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <table class="email-wrapper" cellpadding="0" cellspacing="0" role="presentation">
+        <tr>
+            <td align="center">
+                <table class="email-content" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr>
+                        <td>
+                            <h1>Hi {{name}},</h1>
+                            <p>You have a new task assigned to you:</p>
+                            <p><b>Task:</b> {{taskTitle}}</p>
+                            <p><b>Due Date:</b> {{dueDate}}</p>
+                            <p><b>Description:</b> {{taskDescription}}</p>
+                            <p>Click the link below to view or complete the task:</p>
+                            <a  class="button">View Task</a>
+                            <p>Thank you, <br> The Team</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="footer">
+                            <p>Company Name | Address | Phone</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

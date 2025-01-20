@@ -13,13 +13,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskManagement.DataAccess.Constants;
 using TaskManagement.DataAccess.Dtos.Auth;
+using TaskManagement.DataAccess.Dtos.User;
 using TaskManagement.DataAccess.Entities;
 using TaskManagement.DataAccess.Interfaces;
-using TaskManagement.DataAccess.Responses.User;
 
 namespace TaskManagement.BuisnessLogic.Services
 {
-    public class UserRepository(UserManager<User> userManager , SignInManager<User> signInManager, IOptions<JWT> jwt) : IUserRepository
+    public class UserService(UserManager<User> userManager , SignInManager<User> signInManager, IOptions<JWT> jwt) : IUserService
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly SignInManager<User> signInManager = signInManager;

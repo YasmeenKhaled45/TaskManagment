@@ -40,12 +40,17 @@ namespace TaskManagement.DataAccess.Data
                 .HasForeignKey(t => t.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Tasks>()
+                       .HasMany(t => t.SubTasks)
+                       .WithOne(t => t.ParentTask)
+                       .HasForeignKey(t => t.ParentTaskId)
+                       .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Tasks>()
            .HasOne(t => t.User)  
            .WithMany()  
-           .HasForeignKey(t => t.AssignedToUserId)  // Foreign key property for the User relationship
-           .OnDelete(DeleteBehavior.Restrict);  // Prevent cascading delete if required
+           .HasForeignKey(t => t.AssignedToUserId)  
+           .OnDelete(DeleteBehavior.Restrict);  
 
             // Configure Task to Team relationship
             modelBuilder.Entity<Tasks>()

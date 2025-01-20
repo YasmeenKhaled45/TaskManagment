@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TaskManagement.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class IntialCreate : Migration
+    public partial class TasksDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -203,6 +203,7 @@ namespace TaskManagement.DataAccess.Migrations
                     DueDate = table.Column<DateOnly>(type: "date", nullable: false),
                     TaskPriority = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    ParentTaskId = table.Column<int>(type: "int", nullable: true),
                     AssignedToUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     AssignedToTeamId = table.Column<int>(type: "int", nullable: true),
                     TeamId = table.Column<int>(type: "int", nullable: true),
@@ -230,6 +231,12 @@ namespace TaskManagement.DataAccess.Migrations
                         name: "FK_Tasks_AspNetUsers_UpdatedById",
                         column: x => x.UpdatedById,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tasks_Tasks_ParentTaskId",
+                        column: x => x.ParentTaskId,
+                        principalTable: "Tasks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -400,6 +407,11 @@ namespace TaskManagement.DataAccess.Migrations
                 name: "IX_Tasks_CreateById",
                 table: "Tasks",
                 column: "CreateById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_ParentTaskId",
+                table: "Tasks",
+                column: "ParentTaskId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tasks_TeamId",

@@ -9,9 +9,9 @@ namespace TaskManagment.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasksController(ITaskRepository repository) : ControllerBase
+    public class TasksController(ITaskService repository) : ControllerBase
     {
-        private readonly ITaskRepository repository = repository;
+        private readonly ITaskService repository = repository;
 
    
 

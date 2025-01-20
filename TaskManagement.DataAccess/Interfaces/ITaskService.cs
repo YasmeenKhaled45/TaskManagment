@@ -8,7 +8,7 @@ using TaskManagement.DataAccess.Dtos.Tasks;
 
 namespace TaskManagement.DataAccess.Interfaces
 {
-    public interface ITaskRepository
+    public interface ITaskService
     {
         Task<TaskDto> CreateTaskAsync(CreateTask task, CancellationToken cancellationToken);
         Task<TaskDto> GetTaskById(int Id, CancellationToken cancellationToken);

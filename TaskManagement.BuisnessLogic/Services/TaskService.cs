@@ -11,15 +11,17 @@ using TaskManagement.DataAccess.Interfaces;
 
 namespace TaskManagement.BuisnessLogic.Services
 {
-    public class TaskRepository(AppDbContext context) : ITaskRepository
+    public class TaskService(AppDbContext context , INotficationService notficationService) : ITaskService
     {
         private readonly AppDbContext context = context;
+        private readonly INotficationService notficationService = notficationService;
 
         public async Task<TaskDto> CreateTaskAsync(CreateTask task , CancellationToken cancellationToken)
         {
             var addedtask = task.Adapt<Tasks>();
             await context.Tasks.AddAsync(addedtask,cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
+            await notficationService.SendNewTaskNotfications(addedtask);
             return addedtask.Adapt<TaskDto>();
 
         }

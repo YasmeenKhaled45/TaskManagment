@@ -15,6 +15,10 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using TaskManagement.BuisnessLogic.DataSantization;
 using TaskManagement.DataAccess.Interfaces;
+using Hangfire;
+using HangfireBasicAuthenticationFilter;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using TaskManagement.DataAccess.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +61,12 @@ builder.Services.AddOptions<JWT>().BindConfiguration("JWT")
 builder.Services.AddIdentity<User,IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddHangfire(configuration => configuration
+      .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+      .UseSimpleAssemblyNameTypeSerializer()
+      .UseRecommendedSerializerSettings()
+      .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection")));
+builder.Services.AddHangfireServer();
 builder.Services.Configure<IdentityOptions>(options =>   // register identity
 {
     options.Password.RequiredLength = 8;
@@ -88,11 +98,16 @@ builder.Services.AddAuthentication(options =>
 //});
 
 
-builder.Services.AddScoped<ITaskRepository, TaskRepository>();   // services injection
-builder.Services.AddScoped<IUserRepository,UserRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<ITaskService, TaskService>();   // services injection
+builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<InputSanitizationFilter>();
+builder.Services.AddScoped<INotficationService,NotficationService>();
+builder.Services.AddScoped<IEmailSender,EmailSender>();
+
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 builder.Services.AddMapster();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddFluentValidationAutoValidation();
@@ -109,7 +124,22 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseHangfireDashboard("/jobs", new DashboardOptions
+{
+    Authorization = [
+        new HangfireCustomBasicAuthenticationFilter{
+            User = app.Configuration.GetValue<string>("HangfireSettings:Username"),
+            Pass = app.Configuration.GetValue<string>("HangfireSettings:Password")
+        }
+    ],
+    DashboardTitle = "SurveyBasketJobs"
+});
 
+var factory = app.Services.GetRequiredService<IServiceScopeFactory>();
+using var scope = factory.CreateScope();
+var Notficationservices = scope.ServiceProvider.GetRequiredService<INotficationService>();
+//RecurringJob.AddOrUpdate("SendNewTaskNotfications", () => Notficationservices.SendNewTaskNotfications(), Cron.Daily);
+RecurringJob.AddOrUpdate("SendTaskReminderDate", () => Notficationservices.SendTaskReminderDate(), Cron.Daily(9, 0));
 app.UseAuthorization();
 
 app.MapControllers();

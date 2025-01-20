@@ -11,7 +11,7 @@ using TaskManagement.DataAccess.Interfaces;
 
 namespace TaskManagement.BuisnessLogic.Services
 {
-    public class CommentRepository(AppDbContext context) : ICommentRepository
+    public class CommentService(AppDbContext context) : ICommentService
     {
         private readonly AppDbContext context = context;
 

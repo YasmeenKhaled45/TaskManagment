@@ -9,9 +9,9 @@ namespace TaskManagment.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CommentsController(ICommentRepository repository) : ControllerBase
+    public class CommentsController(ICommentService repository) : ControllerBase
     {
-        private readonly ICommentRepository repository = repository;
+        private readonly ICommentService repository = repository;
 
         [HttpPost("{id}")]
         [ServiceFilter(typeof(InputSanitizationFilter))]

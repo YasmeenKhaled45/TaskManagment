@@ -12,8 +12,8 @@ using TaskManagement.DataAccess.Data;
 namespace TaskManagement.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250115070354_IntialCreate")]
-    partial class IntialCreate
+    [Migration("20250120150530_TasksDb")]
+    partial class TasksDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -257,6 +257,9 @@ namespace TaskManagement.DataAccess.Migrations
                     b.Property<DateOnly>("DueDate")
                         .HasColumnType("date");
 
+                    b.Property<int?>("ParentTaskId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -283,6 +286,8 @@ namespace TaskManagement.DataAccess.Migrations
                     b.HasIndex("AssignedToUserId");
 
                     b.HasIndex("CreateById");
+
+                    b.HasIndex("ParentTaskId");
 
                     b.HasIndex("TeamId");
 
@@ -507,6 +512,11 @@ namespace TaskManagement.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("TaskManagement.DataAccess.Entities.Tasks", "ParentTask")
+                        .WithMany("SubTasks")
+                        .HasForeignKey("ParentTaskId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("TaskManagement.DataAccess.Entities.Team", null)
                         .WithMany("Tasks")
                         .HasForeignKey("TeamId");
@@ -517,6 +527,8 @@ namespace TaskManagement.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CreatedBy");
+
+                    b.Navigation("ParentTask");
 
                     b.Navigation("Team");
 
@@ -579,6 +591,8 @@ namespace TaskManagement.DataAccess.Migrations
                     b.Navigation("Attachments");
 
                     b.Navigation("Comments");
+
+                    b.Navigation("SubTasks");
                 });
 
             modelBuilder.Entity("TaskManagement.DataAccess.Entities.Team", b =>

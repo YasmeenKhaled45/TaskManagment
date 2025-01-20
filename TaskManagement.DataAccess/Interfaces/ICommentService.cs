@@ -7,7 +7,7 @@ using TaskManagement.DataAccess.Dtos.Comments;
 
 namespace TaskManagement.DataAccess.Interfaces
 {
-    public interface ICommentRepository
+    public interface ICommentService
     {
         Task<CommentResponse> CreateComment(int id, CreateComment comment, CancellationToken cancellationToken);
     }
