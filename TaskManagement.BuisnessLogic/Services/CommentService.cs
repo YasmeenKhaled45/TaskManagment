@@ -20,7 +20,7 @@ namespace TaskManagement.BuisnessLogic.Services
             var task = await context.Tasks.FindAsync(id);
             var mapcomment = comment.Adapt<Comments>();
             mapcomment.TaskId = id;
-            await context.Comments.AddAsync(mapcomment,cancellationToken);
+             context.Comments.Add(mapcomment);
             await context.SaveChangesAsync(cancellationToken);
             return mapcomment.Adapt<CommentResponse>();
         }

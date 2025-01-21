@@ -27,7 +27,7 @@ namespace TaskManagement.BuisnessLogic.Services
             var subtask = task.Adapt<Tasks>();
             subtask.ParentTaskId = taskId;
             subtask.Status = Status.ToDo;
-            await context.Tasks.AddAsync(subtask, cancellationToken);
+             context.Tasks.Add(subtask);
             await context.SaveChangesAsync(cancellationToken);
             await notficationService.SendNewTaskNotfications(subtask);
             return Result.Success(subtask.Adapt<TaskDto>());
@@ -35,13 +35,14 @@ namespace TaskManagement.BuisnessLogic.Services
 
         public async Task<TaskDto> CreateTaskAsync(CreateTask task , CancellationToken cancellationToken)
         {
-            var addedtask = task.Adapt<Tasks>();
-            addedtask.Status = Status.ToDo;
-            await context.Tasks.AddAsync(addedtask,cancellationToken);
-            await context.SaveChangesAsync(cancellationToken);
-            await notficationService.SendNewTaskNotfications(addedtask);
-            return addedtask.Adapt<TaskDto>();
+            var addedTask = task.Adapt<Tasks>();
+            addedTask.Status = Status.ToDo;
 
+            context.Tasks.Add(addedTask);
+            await context.SaveChangesAsync(cancellationToken);
+            await notficationService.SendNewTaskNotfications(addedTask);
+
+            return addedTask.Adapt<TaskDto>();
         }
 
         public async Task<Result<TaskDto>> GetTaskById(int Id, CancellationToken cancellationToken)
@@ -54,7 +55,7 @@ namespace TaskManagement.BuisnessLogic.Services
 
         public async Task<Result> StartTask(int taskId, CancellationToken cancellationToken)
         {
-            var task = await context.Tasks.Include(x => x.ParentTask).FirstOrDefaultAsync(x => x.Id == taskId, cancellationToken);
+            var task = await context.Tasks.Where(t => t.Id == taskId).FirstOrDefaultAsync(cancellationToken);
             if (task == null)
                 return Result.Failure(new Error("Start task failed!", "Task not found with this Id"));
             if(task.Status == Status.Late)
