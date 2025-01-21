@@ -26,8 +26,7 @@ namespace TaskManagement.DataAccess.Validations.Tasks
             RuleFor(x => x.TaskPriority)
                 .NotEmpty().WithMessage("Priority is required");
 
-            RuleFor(x => x.Status)
-                .NotEmpty().WithMessage("Status is required");
+
         }
     }
 }

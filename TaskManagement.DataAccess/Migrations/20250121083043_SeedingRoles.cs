@@ -5,7 +5,7 @@
 namespace TaskManagement.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedRoles : Migration
+    public partial class SeedingRoles : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

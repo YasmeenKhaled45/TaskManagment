@@ -11,6 +11,6 @@ namespace TaskManagement.DataAccess.Enums
         ToDo,
         InProgress,
         Completed,
-        InActive
+        Late
     }
 }

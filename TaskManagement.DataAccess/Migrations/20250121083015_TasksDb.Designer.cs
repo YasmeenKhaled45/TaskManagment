@@ -12,7 +12,7 @@ using TaskManagement.DataAccess.Data;
 namespace TaskManagement.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250120150530_TasksDb")]
+    [Migration("20250121083015_TasksDb")]
     partial class TasksDb
     {
         /// <inheritdoc />

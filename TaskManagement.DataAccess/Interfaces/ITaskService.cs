@@ -11,7 +11,9 @@ namespace TaskManagement.DataAccess.Interfaces
     public interface ITaskService
     {
         Task<TaskDto> CreateTaskAsync(CreateTask task, CancellationToken cancellationToken);
-        Task<TaskDto> GetTaskById(int Id, CancellationToken cancellationToken);
+        Task <Result<TaskDto>> GetTaskById(int Id, CancellationToken cancellationToken);
+        Task<Result<TaskDto>> CreateSubTask(int taskId, CreateTask task, CancellationToken cancellationToken);
+        Task<Result> StartTask(int taskId, CancellationToken cancellationToken);    
 
     }
 }

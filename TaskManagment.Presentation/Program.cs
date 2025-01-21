@@ -138,7 +138,7 @@ app.UseHangfireDashboard("/jobs", new DashboardOptions
 var factory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using var scope = factory.CreateScope();
 var Notficationservices = scope.ServiceProvider.GetRequiredService<INotficationService>();
-//RecurringJob.AddOrUpdate("SendNewTaskNotfications", () => Notficationservices.SendNewTaskNotfications(), Cron.Daily);
+RecurringJob.AddOrUpdate("SendNewTaskNotfications", () => Notficationservices.HandleTaskDeadline(), Cron.Daily());
 RecurringJob.AddOrUpdate("SendTaskReminderDate", () => Notficationservices.SendTaskReminderDate(), Cron.Daily(9, 0));
 app.UseAuthorization();
 

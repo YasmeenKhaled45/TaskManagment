@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Mapster;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TaskManagement.DataAccess.Constants;
 using TaskManagement.DataAccess.Data;
+using TaskManagement.DataAccess.Dtos.Tasks;
 using TaskManagement.DataAccess.Entities;
+using TaskManagement.DataAccess.Enums;
 using TaskManagement.DataAccess.Interfaces;
 
 namespace TaskManagement.BuisnessLogic.Services
@@ -18,6 +22,19 @@ namespace TaskManagement.BuisnessLogic.Services
         private readonly UserManager<User> userManager = userManager;
         private readonly IEmailSender emailSender = emailSender;
         private readonly AppDbContext context = context;
+
+        public async Task HandleTaskDeadline()
+        {
+            var overdueTasks = await context.Tasks
+           .Where(task => task.DueDate < DateOnly.FromDateTime(DateTime.UtcNow) && task.Status != Status.Completed)
+            .ToListAsync();
+
+            foreach (var task in overdueTasks)
+            {
+                task.Status = Status.Late;
+            }
+            await context.SaveChangesAsync();
+        }
 
         public async Task SendNewTaskNotfications(Tasks task)
         {
@@ -37,6 +54,7 @@ namespace TaskManagement.BuisnessLogic.Services
                     await emailSender.SendEmailAsync(user.Email!, $"TaskManagment : New Task - {task.Title}", body);
                 }   
         }
+ 
 
         public async Task SendTaskReminderDate()
         {
