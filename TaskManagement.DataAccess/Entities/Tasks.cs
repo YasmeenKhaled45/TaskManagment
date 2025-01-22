@@ -25,5 +25,6 @@ namespace TaskManagement.DataAccess.Entities
         public Team Team { get; set; }
         public ICollection<Comments> Comments { get; set; } = new List<Comments>();
         public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
+        public ICollection<Timelog> Timelogs { get; set; } = new List<Timelog>(); 
     }
 }

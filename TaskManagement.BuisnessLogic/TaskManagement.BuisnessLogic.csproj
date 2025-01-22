@@ -13,11 +13,16 @@
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.17" />
     <PackageReference Include="MailKit" Version="4.9.0" />
     <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="MimeKit" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TaskManagement.DataAccess\TaskManagement.DataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts\Comments\Queries\" />
   </ItemGroup>
 
 </Project>

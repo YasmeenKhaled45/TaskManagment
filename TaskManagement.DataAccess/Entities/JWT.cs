@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TaskManagement.DataAccess.Entities
 {
-    public class JWT
+    public sealed class JWT
     {
         [Required]
         public string key { get; init; }

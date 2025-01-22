@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskManagement.BuisnessLogic.Contracts.Comments.Commands;
+using TaskManagement.BuisnessLogic.Contracts.Tasks.Commands;
 using TaskManagement.DataAccess.Dtos.Auth;
 using TaskManagement.DataAccess.Dtos.Comments;
 using TaskManagement.DataAccess.Dtos.Tasks;
@@ -18,9 +20,9 @@ namespace TaskManagement.DataAccess.Constants
         {
             config.NewConfig<RegisterRequestdto, User>()
                 .Map(dest => dest.UserName, src => src.Email);
-            config.NewConfig<CreateTask, Tasks>();
             config.NewConfig<Tasks, TaskDto>();
-            config.NewConfig<CreateComment, Comments>();
+            config.NewConfig<CreateTaskCommand,Tasks>();
+            config.NewConfig<CreateCommentCommand, Comments>();
             config.NewConfig<Comments, CommentResponse>();
             config.NewConfig<CreateTeamDto, Team>();
             config.NewConfig<Team, TeamDto>();

@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskManagement.BuisnessLogic.Contracts.Tasks.Commands;
 using TaskManagement.DataAccess.Dtos.Tasks;
 
 namespace TaskManagement.DataAccess.Validations.Tasks
 {
-    public class CreateTaskValidator : AbstractValidator<CreateTask>
+    public class CreateTaskValidator : AbstractValidator<CreateTaskCommand>
     {
         public CreateTaskValidator() 
         {

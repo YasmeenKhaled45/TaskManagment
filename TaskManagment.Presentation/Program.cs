@@ -14,11 +14,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using TaskManagement.BuisnessLogic.DataSantization;
-using TaskManagement.DataAccess.Interfaces;
 using Hangfire;
 using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using TaskManagement.DataAccess.Constants;
+using MediatR;
+using TaskManagement.BuisnessLogic.Contracts.Tasks.Handlers;
+using Microsoft.Extensions.DependencyInjection;
+using TaskManagement.DataAccess.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +101,12 @@ builder.Services.AddAuthentication(options =>
 //        policy.RequireRole("Admin", "TeamLeader"));
 //});
 
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly())  // Main assembly
+        .RegisterServicesFromAssembly(Assembly.Load("TaskManagement.BuisnessLogic")) 
+);
+
+
 
 builder.Services.AddScoped<ITaskService, TaskService>();   // services injection
 builder.Services.AddScoped<IUserService,UserService>();
@@ -141,7 +151,6 @@ var Notficationservices = scope.ServiceProvider.GetRequiredService<INotficationS
 RecurringJob.AddOrUpdate("SendNewTaskNotfications", () => Notficationservices.HandleTaskDeadline(), Cron.Daily());
 RecurringJob.AddOrUpdate("SendTaskReminderDate", () => Notficationservices.SendTaskReminderDate(), Cron.Daily(9, 0));
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

@@ -334,6 +334,27 @@ namespace TaskManagement.DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Timelog",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TaskId = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Timelog", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Timelog_Tasks_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "Tasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -432,6 +453,11 @@ namespace TaskManagement.DataAccess.Migrations
                 name: "IX_TeamUsers_UserId",
                 table: "TeamUsers",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Timelog_TaskId",
+                table: "Timelog",
+                column: "TaskId");
         }
 
         /// <inheritdoc />
@@ -463,6 +489,9 @@ namespace TaskManagement.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "TeamUsers");
+
+            migrationBuilder.DropTable(
+                name: "Timelog");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

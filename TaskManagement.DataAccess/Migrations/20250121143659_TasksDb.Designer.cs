@@ -12,8 +12,8 @@ using TaskManagement.DataAccess.Data;
 namespace TaskManagement.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250121083043_SeedingRoles")]
-    partial class SeedingRoles
+    [Migration("20250121143659_TasksDb")]
+    partial class TasksDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -336,6 +336,30 @@ namespace TaskManagement.DataAccess.Migrations
                     b.ToTable("TeamUsers");
                 });
 
+            modelBuilder.Entity("TaskManagement.DataAccess.Entities.Timelog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TaskId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("Timelog");
+                });
+
             modelBuilder.Entity("TaskManagement.DataAccess.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -554,6 +578,17 @@ namespace TaskManagement.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("TaskManagement.DataAccess.Entities.Timelog", b =>
+                {
+                    b.HasOne("TaskManagement.DataAccess.Entities.Tasks", "Task")
+                        .WithMany("Timelogs")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Task");
+                });
+
             modelBuilder.Entity("TaskManagement.DataAccess.Entities.User", b =>
                 {
                     b.OwnsMany("TaskManagement.DataAccess.Entities.RefreshToken", "RefreshTokens", b1 =>
@@ -593,6 +628,8 @@ namespace TaskManagement.DataAccess.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("SubTasks");
+
+                    b.Navigation("Timelogs");
                 });
 
             modelBuilder.Entity("TaskManagement.DataAccess.Entities.Team", b =>
