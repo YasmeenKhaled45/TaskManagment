@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TaskManagement.DataAccess.Dtos.Teams
+namespace TaskManagement.DataAccess.Dtos
 {
     public record TeamDto
-    (int TeamId , string Name);
+    (int TeamId, string Name);
 }

@@ -15,6 +15,7 @@
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="MimeKit" Version="4.9.0" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.5.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Contracts\Comments\Queries\" />
+    <Folder Include="Contracts\Teams\Queries\" />
   </ItemGroup>
 
 </Project>

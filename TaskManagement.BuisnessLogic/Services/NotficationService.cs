@@ -10,7 +10,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using TaskManagement.DataAccess.Constants;
 using TaskManagement.DataAccess.Data;
-using TaskManagement.DataAccess.Dtos.Tasks;
 using TaskManagement.DataAccess.Entities;
 using TaskManagement.DataAccess.Enums;
 using TaskManagement.DataAccess.Interfaces;

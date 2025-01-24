@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaskManagement.DataAccess.Constants;
+using TaskManagement.DataAccess.Dtos;
 using TaskManagement.DataAccess.Dtos.Auth;
-using TaskManagement.DataAccess.Dtos.User;
 
 namespace TaskManagement.DataAccess.Interfaces
 {

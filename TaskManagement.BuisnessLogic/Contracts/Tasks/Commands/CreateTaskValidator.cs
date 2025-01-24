@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaskManagement.BuisnessLogic.Contracts.Tasks.Commands;
-using TaskManagement.DataAccess.Dtos.Tasks;
+
 
 namespace TaskManagement.DataAccess.Validations.Tasks
 {

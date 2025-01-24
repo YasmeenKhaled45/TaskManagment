@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TaskManagement.DataAccess.Dtos.User
+namespace TaskManagement.DataAccess.Dtos
 {
     public record AuthResponse
     (

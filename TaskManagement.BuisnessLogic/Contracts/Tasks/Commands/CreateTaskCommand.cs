@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaskManagement.DataAccess.Constants;
-using TaskManagement.DataAccess.Dtos.Tasks;
+using TaskManagement.DataAccess.Dtos;
 using TaskManagement.DataAccess.Enums;
 
 namespace TaskManagement.BuisnessLogic.Contracts.Tasks.Commands

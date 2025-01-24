@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TaskManagement.DataAccess.Dtos.Teams;
+using TaskManagement.BuisnessLogic.Contracts.Teams.Commands;
+using TaskManagement.DataAccess.Constants;
+using TaskManagement.DataAccess.Dtos;
 
 namespace TaskManagement.DataAccess.Interfaces
 {
     public interface ITeamService
     {
-        Task<TeamDto> CreateTeam(CreateTeamDto teamDto , CancellationToken cancellationToken);
+        Task<Result<TeamDto>> CreateTeam(CreateTeamCommand teamDto , CancellationToken cancellationToken);
         Task<bool> DeleteTeam(int TeamId,CancellationToken cancellationToken);
         Task<TeamDto> GetTeam(int TeamId , CancellationToken cancellationToken);
         Task<List<TeamDto>> GetAllTeams(CancellationToken cancellationToken);

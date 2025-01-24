@@ -22,6 +22,7 @@ using MediatR;
 using TaskManagement.BuisnessLogic.Contracts.Tasks.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 using TaskManagement.DataAccess.Interfaces;
+using TaskManagement.BuisnessLogic.Interfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -112,6 +113,7 @@ builder.Services.AddScoped<ITaskService, TaskService>();   // services injection
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<ITimelogService, TimelogService>();
 builder.Services.AddScoped<InputSanitizationFilter>();
 builder.Services.AddScoped<INotficationService,NotficationService>();
 builder.Services.AddScoped<IEmailSender,EmailSender>();

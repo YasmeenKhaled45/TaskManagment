@@ -1,16 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using TaskManagement.BuisnessLogic.Contracts.Teams.Commands;
 using TaskManagement.BuisnessLogic.Services;
-using TaskManagement.DataAccess.Dtos.Teams;
 using TaskManagement.DataAccess.Interfaces;
 
 namespace TaskManagment.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeamsController(ITeamService teamService) : ControllerBase
+    public class TeamsController(ITeamService teamService,IMediator mediator) : ControllerBase
     {
         private readonly ITeamService teamService = teamService;
+        private readonly IMediator mediator = mediator;
 
         [HttpGet]
         public async Task<IActionResult> Allteams(CancellationToken cancellationToken)
@@ -21,12 +24,10 @@ namespace TaskManagment.Presentation.Controllers
             return Ok(result);
         }
 
-        [HttpPost("Create")]
-        public async Task<IActionResult> CreateTeam([FromBody] CreateTeamDto dto , CancellationToken cancellationToken)
+        [HttpPost("team")]
+        public async Task<IActionResult> CreateTeam([FromBody] CreateTeamCommand teamCommand , CancellationToken cancellationToken)
         {
-            var result = await teamService.CreateTeam(dto,cancellationToken);
-            if (result == null)
-                return BadRequest("Team creation failed.");
+            var result = await mediator.Send(teamCommand, cancellationToken);
             return Ok(result);
         }
         [HttpPost("{TeamId}/AssignTask/{TaskId}")]

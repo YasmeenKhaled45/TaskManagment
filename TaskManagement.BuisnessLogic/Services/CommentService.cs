@@ -8,7 +8,6 @@ using TaskManagement.BuisnessLogic.Contracts.Comments.Commands;
 using TaskManagement.DataAccess.Constants;
 using TaskManagement.DataAccess.Data;
 using TaskManagement.DataAccess.Dtos.Comments;
-using TaskManagement.DataAccess.Dtos.Tasks;
 using TaskManagement.DataAccess.Entities;
 using TaskManagement.DataAccess.Interfaces;
 using TaskManagement.DataAccess.Migrations;

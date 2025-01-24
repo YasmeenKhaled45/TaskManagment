@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskManagement.BuisnessLogic.Contracts.Tasks.Commands;
 using TaskManagement.BuisnessLogic.Contracts.Tasks.Queries;
 using TaskManagement.BuisnessLogic.DataSantization;
-using TaskManagement.DataAccess.Dtos.Tasks;
+using TaskManagement.DataAccess.Filters;
 using TaskManagement.DataAccess.Interfaces;
 
 namespace TaskManagment.Presentation.Controllers
@@ -16,6 +16,23 @@ namespace TaskManagment.Presentation.Controllers
     {
         private readonly ITaskService repository = repository;
         private readonly IMediator mediator = mediator;
+
+        [HttpGet("all-tasks")]
+        public async Task<IActionResult> AllTasks([FromQuery] FiltersParams filters , CancellationToken cancellationToken) 
+        {
+            var query = new GetTasksQueryList
+            {
+                PageNumber = filters.PageNumber,
+                PageSize = filters.PageSize,
+                SortBy = filters.SortBy,
+                SortDirection = filters.SortDirection,
+                Searchterm = filters.Searchterm,
+            };
+
+            var response = await mediator.Send(query, cancellationToken);
+
+            return Ok(response);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTask([FromRoute] int id, CancellationToken cancellationToken)
@@ -49,6 +66,12 @@ namespace TaskManagment.Presentation.Controllers
         public async Task<IActionResult> StartTask(int taskId, CancellationToken cancellationToken)
         {
             var result = await repository.StartTask(taskId, cancellationToken);
+            return Ok(result);
+        }
+        [HttpPost("{taskId}/endTask")]
+        public async Task<IActionResult> EndTask(int taskId , CancellationToken cancellationToken)
+        {
+            var result = await repository.EndTask(taskId, cancellationToken);
             return Ok(result);
         }
     }

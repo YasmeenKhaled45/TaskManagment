@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskManagement.BuisnessLogic.Contracts.Teams.Commands;
+using TaskManagement.DataAccess.Constants;
 using TaskManagement.DataAccess.Data;
-using TaskManagement.DataAccess.Dtos.Teams;
+using TaskManagement.DataAccess.Dtos;
 using TaskManagement.DataAccess.Entities;
 using TaskManagement.DataAccess.Interfaces;
 
@@ -27,10 +29,10 @@ namespace TaskManagement.BuisnessLogic.Services
             return true;
         }
 
-        public async Task<TeamDto> CreateTeam(CreateTeamDto teamDto, CancellationToken cancellationToken)
+        public async Task<Result<TeamDto>> CreateTeam(CreateTeamCommand teamCommand, CancellationToken cancellationToken)
         {
-            var team = teamDto.Adapt<Team>();
-            foreach (var userId in teamDto.UserIds)
+            var team = teamCommand.Adapt<Team>();
+            foreach (var userId in teamCommand.UserIds)
             {
                 var user = await context.Users.FindAsync(userId);
                 if (user != null)
@@ -38,10 +40,9 @@ namespace TaskManagement.BuisnessLogic.Services
                     team.TeamUsers.Add(new TeamUser { UserId = user.Id });
                 }
             }
-
             context.Teams.Add(team);
             await context.SaveChangesAsync(cancellationToken);
-            return team.Adapt<TeamDto>();
+            return Result.Success(team.Adapt<TeamDto>());
         }
 
         public async Task<bool> DeleteTeam(int TeamId, CancellationToken cancellationToken)
