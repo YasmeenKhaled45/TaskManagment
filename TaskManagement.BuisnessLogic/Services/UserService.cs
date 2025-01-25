@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -11,25 +12,29 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using TaskManagement.BuisnessLogic.Contracts.Users.Commands;
 using TaskManagement.DataAccess.Constants;
 using TaskManagement.DataAccess.Dtos;
 using TaskManagement.DataAccess.Dtos.Auth;
 using TaskManagement.DataAccess.Entities;
+using TaskManagement.DataAccess.Errors;
 using TaskManagement.DataAccess.Interfaces;
 
 namespace TaskManagement.BuisnessLogic.Services
 {
-    public class UserService(UserManager<User> userManager , SignInManager<User> signInManager, IOptions<JWT> jwt) : IUserService
+    public class UserService(UserManager<User> userManager, IOptions<JWT> jwt) : IUserService
     {
         private readonly UserManager<User> _userManager = userManager;
-        private readonly SignInManager<User> signInManager = signInManager;
         private readonly JWT jWT = jwt.Value;
 
         public async Task<Result<AuthResponse>> LoginAsync(LoginRequest request, CancellationToken cancellationToken)
         {
             if (await _userManager.FindByEmailAsync(request.Email) is not { } user)
-                return Result.Failure<AuthResponse>(new Error("User.InvalidCredentials", "Invalid Email or Password"));
-
+                return Result.Failure<AuthResponse>(AuthErrors.InvalidCredentials);
+            if (user.AccessFailedCount >= 5)
+            {
+                return Result.Failure<AuthResponse>(AuthErrors.LockedUser);
+            }
             var result = await _userManager.CheckPasswordAsync(user, request.Password);
             if (result)
             {
@@ -60,7 +65,7 @@ namespace TaskManagement.BuisnessLogic.Services
                 return Result.Success(response);
 
             }
-            return Result.Failure<AuthResponse>(new Error("Login Failed", "Email or Password is incorrect!"));
+            return Result.Failure<AuthResponse>(AuthErrors.InvalidCredentials);
         }
 
         private string GenerateRefreshToken()
@@ -105,15 +110,14 @@ namespace TaskManagement.BuisnessLogic.Services
         {
             var emailexists =  await _userManager.FindByEmailAsync(request.Email);
             if(emailexists is not null) 
-                return Result.Failure(new Error("Registration Failed!", "Email already exists!"));
+                return Result.Failure(AuthErrors.DuplicatedEmail);
 
             var user = request.Adapt<User>();
             user.UserName = request.Email;
             if (string.IsNullOrEmpty(user.UserName))
             {
-                return Result.Failure(new Error("Registration Failed!", "UserName is not being set correctly."));
+                return Result.Failure(AuthErrors.UserName);
             }
-
             var res = await _userManager.CreateAsync(user,request.Password);
             if (!res.Succeeded)
             {
@@ -128,6 +132,23 @@ namespace TaskManagement.BuisnessLogic.Services
                 return Result.Failure(new Error("Role Assignment Failed!", roleErrors));
             }
 
+            return Result.Success();
+        }
+
+        public async Task<Result<UserProfileResponse>> GetUserProfile(string UserId)
+        {
+            var user = await _userManager.Users.Where(x => x.Id == UserId).
+                ProjectToType<UserProfileResponse>().SingleOrDefaultAsync();
+            return Result.Success(user!);
+
+        }
+
+        public async Task<Result> UpdateProfileAsync(UpdateProfileCommand profileCommand, CancellationToken cancellationToken)
+        {
+            await _userManager.Users.Where(x => x.Id == profileCommand.UserId).
+                ExecuteUpdateAsync(setter =>
+                setter.SetProperty(x => x.FirstName, profileCommand.FirstName)
+                .SetProperty(x => x.LastName, profileCommand.LastName));
             return Result.Success();
         }
     }

@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using TaskManagement.BuisnessLogic.Contracts.Users.Queries;
 using TaskManagement.BuisnessLogic.DataSantization;
 using TaskManagement.DataAccess.Dtos.Auth;
 using TaskManagement.DataAccess.Interfaces;

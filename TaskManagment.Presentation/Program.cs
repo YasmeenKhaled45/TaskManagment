@@ -76,6 +76,9 @@ builder.Services.Configure<IdentityOptions>(options =>   // register identity
 {
     options.Password.RequiredLength = 8;
     options.SignIn.RequireConfirmedEmail = true;
+    options.Lockout.AllowedForNewUsers = true;
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.User.RequireUniqueEmail = true;
 });
 builder.Services.AddAuthentication(options =>
@@ -112,6 +115,7 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddScoped<ITaskService, TaskService>();   // services injection
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<ITimelogService, TimelogService>();
 builder.Services.AddScoped<InputSanitizationFilter>();
