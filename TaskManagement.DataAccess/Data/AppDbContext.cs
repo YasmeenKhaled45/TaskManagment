@@ -20,6 +20,7 @@ namespace TaskManagement.DataAccess.Data
         public DbSet<Tasks> Tasks { get; set; } = null!;
         public DbSet<Team> Teams { get; set; } = null!;
         public DbSet<TeamUser> TeamUsers { get; set; } = null!;
+        public DbSet<Timelog> Timelogs { get; set; }
         public DbSet<Comments> Comments { get; set; } = null!;
         public DbSet<Attachment> Attachments { get; set; } = null!;
         public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;

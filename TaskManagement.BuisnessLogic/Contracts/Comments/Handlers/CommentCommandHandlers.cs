@@ -20,6 +20,11 @@ namespace TaskManagement.BuisnessLogic.Contracts.Comments.Handlers
 
         public async Task<Result<CommentResponse>> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
         {
+            var task = await taskService.GetTaskById(request.TaskId,cancellationToken);
+            if (task == null)
+            {
+                return Result.Failure<CommentResponse>(new Error("Creation failed!", "Task not found with this Id"));
+            }
             return await commentService.CreateComment(request.TaskId, request.Content, cancellationToken);
         }
 

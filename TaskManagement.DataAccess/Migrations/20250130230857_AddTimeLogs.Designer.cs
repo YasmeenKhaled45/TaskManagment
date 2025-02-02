@@ -12,8 +12,8 @@ using TaskManagement.DataAccess.Data;
 namespace TaskManagement.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250121143736_SeedRoles")]
-    partial class SeedRoles
+    [Migration("20250130230857_AddTimeLogs")]
+    partial class AddTimeLogs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -353,11 +353,16 @@ namespace TaskManagement.DataAccess.Migrations
                     b.Property<int>("TaskId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("TaskId");
 
-                    b.ToTable("Timelog");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Timelogs");
                 });
 
             modelBuilder.Entity("TaskManagement.DataAccess.Entities.User", b =>
@@ -586,7 +591,13 @@ namespace TaskManagement.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TaskManagement.DataAccess.Entities.User", "User")
+                        .WithMany("Timelogs")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Task");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TaskManagement.DataAccess.Entities.User", b =>
@@ -644,6 +655,8 @@ namespace TaskManagement.DataAccess.Migrations
                     b.Navigation("AssignedTasks");
 
                     b.Navigation("TeamUsers");
+
+                    b.Navigation("Timelogs");
                 });
 #pragma warning restore 612, 618
         }

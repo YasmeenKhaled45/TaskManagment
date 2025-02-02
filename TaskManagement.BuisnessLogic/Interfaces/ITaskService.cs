@@ -16,7 +16,7 @@ namespace TaskManagement.DataAccess.Interfaces
         Task<Result<TaskDto>> CreateTaskAsync( CreateTaskCommand task, CancellationToken cancellationToken);
         Task <Result<TaskDto>> GetTaskById(int Id, CancellationToken cancellationToken);
         Task<Result<TaskDto>> CreateSubTask(int taskId, CreateTaskCommand task, CancellationToken cancellationToken);
-        Task<Result> StartTask(int taskId, CancellationToken cancellationToken);    
+        Task<Result> StartTask(StartTaskCommand command,CancellationToken cancellationToken);    
         Task<Result> EndTask(int taskId, CancellationToken cancellationToken);
     }
 }

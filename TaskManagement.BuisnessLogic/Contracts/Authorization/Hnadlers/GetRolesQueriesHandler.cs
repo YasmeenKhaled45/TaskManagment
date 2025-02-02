@@ -16,7 +16,8 @@ namespace TaskManagement.BuisnessLogic.Contracts.Authorization.Hnadlers
 
         public async Task<IEnumerable<RoleResponse>> Handle(GetRolesListQuery request, CancellationToken cancellationToken)
         {
-            return await roleService.GetAllRoles(cancellationToken);
+            var roles = await roleService.GetAllRoles(cancellationToken);
+            return roles.Where(r => r.Name != "User");
         }
     }
 }

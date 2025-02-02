@@ -11,6 +11,8 @@ namespace TaskManagement.DataAccess.Entities
         public int Id {  get; set; }
         public int TaskId { get; set; }
         public Tasks Task { get; set; }
+        public string? UserId {  get; set; }
+        public User User { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public TimeSpan Duration => (EndTime ?? DateTime.Now) - StartTime;

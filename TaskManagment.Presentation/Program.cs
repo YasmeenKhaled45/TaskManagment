@@ -23,12 +23,17 @@ using TaskManagement.BuisnessLogic.Contracts.Tasks.Handlers;
 using Microsoft.Extensions.DependencyInjection;
 using TaskManagement.DataAccess.Interfaces;
 using TaskManagement.BuisnessLogic.Interfaces;
+using TaskManagement.DataAccess.Errors;
+using Serilog;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+});
 builder.Services.AddControllers(options =>          //data santization
 {
     options.Filters.Add(typeof(InputSanitizationFilter));
@@ -122,7 +127,8 @@ builder.Services.AddScoped<InputSanitizationFilter>();
 builder.Services.AddScoped<INotficationService,NotficationService>();
 builder.Services.AddScoped<IEmailSender,EmailSender>();
 
-
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
 builder.Services.AddMapster();
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
@@ -138,7 +144,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseHangfireDashboard("/jobs", new DashboardOptions
 {
@@ -158,5 +164,6 @@ RecurringJob.AddOrUpdate("SendNewTaskNotfications", () => Notficationservices.Ha
 RecurringJob.AddOrUpdate("SendTaskReminderDate", () => Notficationservices.SendTaskReminderDate(), Cron.Daily(9, 0));
 app.UseAuthorization();
 app.MapControllers();
+app.UseExceptionHandler();
 
 app.Run();

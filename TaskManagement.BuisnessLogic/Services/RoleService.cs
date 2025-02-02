@@ -21,26 +21,22 @@ namespace TaskManagement.BuisnessLogic.Services
 
         public async Task<Result<RoleResponse>> AddRoleAsync(AddRoleCommand addRole, CancellationToken cancellationToken)
         {
-            var roleExists = await roleManager.RoleExistsAsync(addRole.Name);
-            if (roleExists)
-                return Result.Failure<RoleResponse>(RoleErrors.DuplicatedRole);
             var role = new IdentityRole
             {
                 Name = addRole.Name,
                 ConcurrencyStamp = Guid.NewGuid().ToString()
             };
             var result = await roleManager.CreateAsync(role);
-            return Result.Success(role.Adapt<RoleResponse>());
+            return result.Succeeded
+             ? Result.Success(role.Adapt<RoleResponse>())
+             : Result.Failure<RoleResponse>(new Error("RoleCreationFailed", "Failed to create role"));
         }
 
         public async Task<IEnumerable<RoleResponse>> GetAllRoles(CancellationToken cancellationToken)=> 
-            await roleManager.Roles.Where(r=>r.Name != "User").ProjectToType<RoleResponse>().ToListAsync(cancellationToken);
+            await roleManager.Roles.ProjectToType<RoleResponse>().ToListAsync(cancellationToken);
 
         public async Task<Result> UpdateRoleAsync(string RoleId, UpdateRoleCommand roleCommand, CancellationToken cancellationToken)
         {
-            var roleExists = await roleManager.Roles.AnyAsync(x => x.Name == roleCommand.Name && x.Id != RoleId);
-            if (roleExists)
-                return Result.Failure(RoleErrors.DuplicatedRole);
             if (await roleManager.FindByIdAsync(RoleId) is not { } role)
                 return Result.Failure(RoleErrors.RoleNotFound);
             role.Name = roleCommand.Name;

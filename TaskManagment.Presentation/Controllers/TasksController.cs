@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TaskManagement.BuisnessLogic.Contracts.Tasks.Commands;
 using TaskManagement.BuisnessLogic.Contracts.Tasks.Queries;
 using TaskManagement.BuisnessLogic.DataSantization;
 using TaskManagement.DataAccess.Filters;
 using TaskManagement.DataAccess.Interfaces;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TaskManagment.Presentation.Controllers
 {
@@ -63,9 +65,16 @@ namespace TaskManagment.Presentation.Controllers
         }
 
         [HttpPost("{taskId}/startTask")]
-        public async Task<IActionResult> StartTask(int taskId, CancellationToken cancellationToken)
+        [Authorize]
+        public async Task<IActionResult> StartTask([FromRoute]int taskId , CancellationToken cancellationToken)
         {
-            var result = await repository.StartTask(taskId, cancellationToken);
+            var userId = User.FindFirstValue("uid");
+            var command = new StartTaskCommand
+            {
+                TaskId = taskId,  
+                UserId = userId!  
+            };
+            var result = await mediator.Send(command,cancellationToken);
             return Ok(result);
         }
         [HttpPost("{taskId}/endTask")]

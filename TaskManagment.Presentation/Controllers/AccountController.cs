@@ -26,9 +26,10 @@ namespace TaskManagment.Presentation.Controllers
         public async Task<IActionResult> UserProfile([FromBody]UpdateProfileCommand command , CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue("uid");
-            command.UserId = userId!;
-            var result = await mediator.Send(command,cancellationToken);
+            command.UserId = userId;
+            var result = await mediator.Send(command);
             return Ok(result);
         }
+       
     }
 }

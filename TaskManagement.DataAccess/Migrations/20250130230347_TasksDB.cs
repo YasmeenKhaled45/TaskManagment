@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TaskManagement.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class TasksDb : Migration
+    public partial class TasksDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -341,12 +341,18 @@ namespace TaskManagement.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TaskId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Timelog", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Timelog_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Timelog_Tasks_TaskId",
                         column: x => x.TaskId,
@@ -458,6 +464,11 @@ namespace TaskManagement.DataAccess.Migrations
                 name: "IX_Timelog_TaskId",
                 table: "Timelog",
                 column: "TaskId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Timelog_UserId",
+                table: "Timelog",
+                column: "UserId");
         }
 
         /// <inheritdoc />

@@ -29,17 +29,8 @@ namespace TaskManagement.BuisnessLogic.Services
             return true;
         }
 
-        public async Task<Result<TeamDto>> CreateTeam(CreateTeamCommand teamCommand, CancellationToken cancellationToken)
+        public async Task<Result<TeamDto>> CreateTeam(Team team, CancellationToken cancellationToken)
         {
-            var team = teamCommand.Adapt<Team>();
-            foreach (var userId in teamCommand.UserIds)
-            {
-                var user = await context.Users.FindAsync(userId);
-                if (user != null)
-                {
-                    team.TeamUsers.Add(new TeamUser { UserId = user.Id });
-                }
-            }
             context.Teams.Add(team);
             await context.SaveChangesAsync(cancellationToken);
             return Result.Success(team.Adapt<TeamDto>());
